@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#f2e0c8"/>
+  <title>Baby Shower · Arturo Rafael</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #f3e3cc; --bg2: #ebd5b9;
+      --surface: rgba(255,251,244,.68);
+      --ink: #3f2206; --ink2: #6d4422; --ink3: #96683e;
+      --blue: #7fafc6; --blue2: #bad4e6; --blue3: #daeaf5;
+      --gold: #b87e38; --gold2: #daa560; --gold3: #f0d4a0;
+      --white: #fffdf8;
+      --f-script: 'Great Vibes', cursive;
+      --f-serif: 'Cormorant Garamond', Georgia, serif;
+      --f-sans: 'Jost', system-ui, sans-serif;
+      --ease: cubic-bezier(.22,1,.36,1);
+      --spring: cubic-bezier(.34,1.56,.64,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--f-sans); background: var(--bg); color: var(--ink);
+      overflow-x: hidden; min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    body.locked { overflow: hidden; }
+    ::selection { background: var(--gold3); color: var(--ink); }
+
+    /* ═══════════ SPLASH SCREEN ═══════════ */
+    .splash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at 50% 40%, #f8edd8, var(--bg2));
+      transition: opacity .8s ease, visibility .8s;
+    }
+    .splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash__card {
+      text-align: center; padding: 40px; max-width: 380px;
+      animation: splashIn 1s var(--ease) both;
+    }
+    @keyframes splashIn {
+      from { opacity: 0; transform: translateY(30px) scale(.95); }
+      to   { opacity: 1; transform: none; }
+    }
+    .splash__bear { width: 110px; margin: 0 auto 20px; display: block;
+      animation: sBear 3s ease-in-out infinite; }
+    @keyframes sBear {
+      0%,100%{ transform: translateY(0) rotate(-2deg); }
+      50%{ transform: translateY(-12px) rotate(2deg); }
+    }
+    .splash__pre { font-family: var(--f-serif); font-style: italic;
+      font-size: .95rem; color: var(--ink3); letter-spacing: .06em; }
+    .splash__title { font-family: var(--f-script); font-size: 3.8rem;
+      color: var(--ink); line-height: .95; margin: 6px 0 4px; }
+    .splash__name { font-family: var(--f-serif); font-size: 1.4rem; font-weight: 300;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--ink2); }
+    .splash__parents { font-family: var(--f-serif); font-style: italic;
+      font-size: .88rem; color: var(--ink3); margin-top: 18px; line-height: 1.5; }
+    .splash__btn {
+      display: inline-block; margin-top: 28px; padding: 16px 48px;
+      background: linear-gradient(135deg, var(--ink2), var(--ink));
+      color: var(--white); border: none; border-radius: 50px;
+      font-family: var(--f-serif); font-size: 1.05rem; font-weight: 600;
+      letter-spacing: .06em; cursor: pointer;
+      box-shadow: 0 6px 28px rgba(63,34,6,.25);
+      transition: transform .3s var(--spring), box-shadow .3s var(--ease);
+      animation: btnPulse 2.5s ease-in-out infinite;
+    }
+    .splash__btn:hover { transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 36px rgba(63,34,6,.35); }
+    @keyframes btnPulse {
+      0%,100%{ box-shadow: 0 6px 28px rgba(63,34,6,.25); }
+      50%{ box-shadow: 0 6px 28px rgba(63,34,6,.25), 0 0 0 8px rgba(184,126,56,.15); }
+    }
+    .splash__hint { display: block; font-size: .72rem; color: var(--ink3);
+      margin-top: 12px; opacity: .6; letter-spacing: .08em; }
+
+    /* ═══════════ GRAIN ═══════════ */
+    .grain { position: fixed; inset: 0; z-index: 800; pointer-events: none;
+      opacity: .03; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px; }
+
+    /* ═══════════ BG LAYERS ═══════════ */
+    .bg-ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 85% 55% at 22% 10%, rgba(127,175,198,.16), transparent 55%),
+        radial-gradient(ellipse 65% 45% at 80% 85%, rgba(184,126,56,.09), transparent 50%),
+        var(--bg); }
+
+    .bg-layer { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+    .bg-stars { z-index: 1; }
+    .bg-clouds { z-index: 2; }
+    .bg-balloons { z-index: 3; }
+
+    .star { position: absolute; border-radius: 50%;
+      animation: starP ease-in-out infinite; }
+    @keyframes starP { 0%,100%{ opacity:0; transform:scale(.3) } 50%{ opacity:.6; transform:scale(1) } }
+
+    .cloud { position: absolute; opacity: 0; }
+    .cloud--l { animation: cL linear infinite; }
+    .cloud--r { animation: cR linear infinite; }
+    @keyframes cL { 0%{ transform:translateX(-340px);opacity:0 } 5%{ opacity:.5 } 95%{ opacity:.4 } 100%{ transform:translateX(calc(100vw+340px));opacity:0 } }
+    @keyframes cR { 0%{ transform:translateX(340px);opacity:0 } 5%{ opacity:.45 } 95%{ opacity:.35 } 100%{ transform:translateX(calc(-100vw-340px));opacity:0 } }
+
+    .bln { position: absolute; bottom: -150px; animation: bU linear infinite; }
+    @keyframes bU {
+      0%{ transform:translateY(0) translateX(0) rotate(-1deg); opacity:0 }
+      5%{ opacity:.85 }
+      30%{ transform:translateY(-32vh) translateX(16px) rotate(2.5deg) }
+      60%{ transform:translateY(-64vh) translateX(-12px) rotate(-1.5deg) }
+      95%{ opacity:.4 }
+      100%{ transform:translateY(-120vh) translateX(6px) rotate(1deg); opacity:0 }
+    }
+
+    /* ═══════════ PAGE ═══════════ */
+    .page { position: relative; z-index: 10; max-width: 660px; margin: 0 auto;
+      padding: 28px 20px 100px; }
+
+    /* ═══════════ REVEAL ON SCROLL ═══════════ */
+    .rv { opacity: 0; transform: translateY(40px);
+      transition: opacity .85s var(--ease), transform .85s var(--ease); }
+    .rv.vis { opacity: 1; transform: none; }
+    .rv-d1 { transition-delay: .12s; } .rv-d2 { transition-delay: .24s; } .rv-d3 { transition-delay: .36s; }
+
+    /* ═══════════ BANNER (personalized) ═══════════ */
+    .bnr { display: none; background: linear-gradient(135deg,rgba(127,175,198,.2),rgba(186,212,230,.12));
+      border: 1px solid rgba(127,175,198,.4); border-radius: 24px; padding: 18px 28px;
+      text-align: center; margin-bottom: 28px; backdrop-filter: blur(14px); }
+    .bnr__lbl { font-family: var(--f-serif); font-style: italic; font-size: .9rem; color: var(--ink3); }
+    .bnr__name { font-family: var(--f-serif); font-size: 1.55rem; font-weight: 600; color: var(--ink); margin-top: 2px; }
+    .bnr__passes { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
+      background: rgba(255,253,248,.55); border: 1px solid rgba(184,126,56,.22); border-radius: 50px;
+      padding: 5px 16px; font-size: .8rem; font-weight: 500; color: var(--ink2); }
+
+    /* ═══════════ HERO ═══════════ */
+    .hero { text-align: center; padding: 36px 16px 20px; }
+    .hero__bear-w { display: inline-block; animation: bearF 4.5s ease-in-out infinite; }
+    @keyframes bearF { 0%,100%{ transform:translateY(0) rotate(-1.5deg) } 50%{ transform:translateY(-18px) rotate(1.5deg) } }
+    .hero__bear { width: 130px; height: auto; filter: drop-shadow(0 12px 28px rgba(63,34,6,.18)); }
+    .hero__parents { display: block; font-family: var(--f-serif); font-style: italic;
+      font-size: 1rem; color: var(--ink3); margin-top: 24px; letter-spacing: .04em; line-height: 1.6; }
+    .hero__parents strong { font-style: normal; font-weight: 600; color: var(--ink2); }
+    .hero__announce { display: block; font-family: var(--f-sans); font-size: .7rem; font-weight: 500;
+      letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-top: 20px; }
+    .hero__title { font-family: var(--f-script); font-size: clamp(3.2rem,11vw,6.2rem);
+      color: var(--ink); line-height: .95; margin-top: 4px; }
+    .hero__name { font-family: var(--f-serif); font-size: clamp(1.4rem,5.5vw,2.4rem); font-weight: 300;
+      letter-spacing: .24em; text-transform: uppercase; color: var(--ink2); margin-top: 10px;
+      display: inline-block; white-space: nowrap; }
+    .orn { display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin: 28px auto; max-width: 260px; }
+    .orn__l { flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold2), transparent); }
+    .orn__d { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+
+    /* ═══════════ MESSAGE ═══════════ */
+    .msg { font-family: var(--f-serif); font-style: italic;
+      font-size: clamp(1rem,3vw,1.15rem); line-height: 1.9; color: var(--ink2);
+      text-align: center; max-width: 440px; margin: 0 auto 28px; }
+
+    /* ═══════════ CARDS ═══════════ */
+    .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 32px 0; }
+    @media(max-width:540px) { .cards { grid-template-columns: 1fr; gap: 10px; } }
+    .card { background: var(--surface); border: 1px solid rgba(184,126,56,.16); border-radius: 20px;
+      padding: 26px 14px; text-align: center; backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 6px 24px rgba(63,34,6,.05);
+      transition: transform .4s var(--spring), box-shadow .4s var(--ease); cursor: default; }
+    .card:hover { transform: translateY(-7px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 20px 48px rgba(63,34,6,.1); }
+    .card__ico { display: block; margin: 0 auto 10px; }
+    .card__lbl { font-family: var(--f-sans); font-size: .66rem; font-weight: 500;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 4px; }
+    .card__val { font-family: var(--f-serif); font-size: 1.08rem; font-weight: 600;
+      color: var(--ink); line-height: 1.35; }
+
+    /* ═══════════ PANEL ═══════════ */
+    .panel { background: var(--surface); border: 1px solid rgba(184,126,56,.18); border-radius: 32px;
+      padding: 48px 32px; position: relative; backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 24px 64px rgba(63,34,6,.06); margin-bottom: 40px; }
+
+    /* ═══════════ COUNTDOWN ═══════════ */
+    .cd-sec { text-align: center; margin: 40px 0; }
+    .cd-sec__lbl { font-family: var(--f-serif); font-style: italic; font-size: 1.05rem;
+      color: var(--ink3); margin-bottom: 18px; }
+    .cd { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .cu { min-width: 68px; padding: 18px 12px; background: var(--surface);
+      border: 1px solid rgba(127,175,198,.3); border-radius: 16px; backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 4px 16px rgba(127,175,198,.1);
+      position: relative; overflow: hidden; text-align: center; }
+    .cu::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 44%;
+      background: linear-gradient(to bottom, rgba(255,255,255,.12), transparent);
+      border-radius: 16px 16px 0 0; }
+    .cu__n { font-family: var(--f-serif); font-size: 2.3rem; font-weight: 600; color: var(--ink);
+      line-height: 1; display: block; position: relative; z-index: 1; }
+    .cu__l { font-family: var(--f-sans); font-size: .62rem; font-weight: 500; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--ink3); margin-top: 4px; display: block; position: relative; z-index: 1; }
+    .cd__sep { font-family: var(--f-serif); font-size: 2rem; color: var(--gold2);
+      align-self: center; margin-top: -4px; animation: blink 1.2s step-end infinite; }
+    @keyframes blink { 0%,100%{ opacity:1 } 50%{ opacity:.1 } }
+
+    /* ═══════════ GIFT ═══════════ */
+    .gift { position: relative; background: linear-gradient(150deg,rgba(255,251,244,.78),rgba(237,220,195,.48));
+      border: 1px solid rgba(184,126,56,.2); border-radius: 32px; padding: 48px 32px;
+      text-align: center; backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 0 rgba(255,253,248,.85), 0 20px 52px rgba(63,34,6,.05); margin-bottom: 40px; }
+    .gift__ico { display: block; margin: 0 auto 16px; animation: bearF 5s ease-in-out infinite; }
+    .gift h2 { font-family: var(--f-script); font-size: clamp(1.8rem,6vw,2.6rem);
+      color: var(--ink); margin-bottom: 16px; line-height: 1; }
+    .gift__body { font-family: var(--f-serif); font-size: 1.05rem; line-height: 1.85;
+      color: var(--ink2); max-width: 400px; margin: 0 auto 14px; }
+    .gift__sub { font-family: var(--f-serif); font-style: italic; font-size: .9rem;
+      color: var(--ink3); line-height: 1.7; max-width: 360px; margin: 0 auto 18px; }
+    .gift__pill { display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(184,126,56,.1); border: 1px solid rgba(184,126,56,.3); border-radius: 50px;
+      padding: 8px 22px; font-family: var(--f-serif); font-style: italic; font-size: .92rem;
+      color: var(--ink); }
+
+    /* ═══════════ RSVP ═══════════ */
+    .rsvp { text-align: center; background: var(--surface); border: 1px solid rgba(184,126,56,.16);
+      border-radius: 32px; padding: 48px 32px; backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 0 rgba(255,253,248,.85), 0 20px 52px rgba(63,34,6,.05); margin-bottom: 40px; }
+    .rsvp h2 { font-family: var(--f-script); font-size: clamp(1.8rem,6vw,2.6rem);
+      color: var(--ink); margin-bottom: 6px; line-height: 1; }
+    .rsvp__sub { font-family: var(--f-serif); font-style: italic; font-size: .95rem;
+      line-height: 1.75; color: var(--ink3); margin-bottom: 28px; }
+    .rsvp__sub strong { color: var(--ink2); font-style: normal; }
+    .btn-wa { display: inline-flex; align-items: center; gap: 12px;
+      background: linear-gradient(160deg,#2ecc71,#1fa855); color: #fff; border: none;
+      border-radius: 50px; padding: 17px 42px; font-family: var(--f-serif);
+      font-size: 1.05rem; font-weight: 600; letter-spacing: .03em;
+      cursor: pointer; text-decoration: none; position: relative; overflow: hidden;
+      box-shadow: 0 6px 26px rgba(31,168,85,.28);
+      transition: transform .35s var(--spring), box-shadow .35s var(--ease); }
+    .btn-wa::before { content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom,rgba(255,255,255,.15),transparent); border-radius: 50px; }
+    .btn-wa:hover { transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 14px 40px rgba(31,168,85,.35); }
+    .btn-wa:active { transform: scale(.97); }
+    .btn-wa svg { width: 22px; height: 22px; fill: #fff; position: relative; }
+    .rsvp__hint { display: block; font-size: .74rem; color: var(--ink3); opacity: .65;
+      margin-top: 14px; font-style: italic; }
+
+    /* ═══════════ FOOTER ═══════════ */
+    .foot { text-align: center; padding: 16px 0 28px; }
+    .foot__msg { font-family: var(--f-serif); font-style: italic; font-size: 1rem;
+      color: var(--ink3); line-height: 1.7; margin-bottom: 16px; }
+    .foot__msg strong { font-style: normal; color: var(--ink2); }
+    .foot__close { font-family: var(--f-script); font-size: clamp(2rem,7vw,3rem);
+      color: var(--ink); display: block; margin-bottom: 14px; }
+    .foot__deco { display: flex; justify-content: center; gap: 22px; }
+    .foot__deco svg { animation: bearF 4s ease-in-out infinite;
+      filter: drop-shadow(0 4px 8px rgba(63,34,6,.1)); }
+    .foot__deco svg:nth-child(2) { animation-delay: .5s; }
+    .foot__deco svg:nth-child(3) { animation-delay: 1s; }
+
+    /* ═══════════ MUSIC BTN ═══════════ */
+    .mu-btn { position: fixed; bottom: 22px; right: 20px; z-index: 100;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid rgba(184,126,56,.3);
+      backdrop-filter: blur(16px); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 4px 18px rgba(63,34,6,.12);
+      transition: transform .3s var(--spring); outline: none; }
+    .mu-btn:hover { transform: scale(1.1); }
+    .mu-btn.on { border-color: rgba(184,126,56,.6);
+      animation: muP 2s ease-in-out infinite; }
+    @keyframes muP {
+      0%,100%{ box-shadow: inset 0 1px 0 rgba(255,255,255,.6),0 4px 18px rgba(63,34,6,.12),0 0 0 0 rgba(184,126,56,.2) }
+      50%{ box-shadow: inset 0 1px 0 rgba(255,255,255,.6),0 4px 18px rgba(63,34,6,.12),0 0 0 9px rgba(184,126,56,0) }
+    }
+
+    /* ═══════════ RESPONSIVE ═══════════ */
+    @media(max-width:480px) {
+      .page { padding: 18px 14px 80px; }
+      .panel,.gift,.rsvp { padding: 32px 18px; border-radius: 24px; }
+      .hero__bear { width: 100px; }
+      .cu { min-width: 56px; padding: 14px 10px; }
+      .cu__n { font-size: 1.9rem; }
+      .btn-wa { padding: 15px 28px; font-size: .95rem; }
+      .splash__title { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body class="locked">
+
+<!-- ═════ SPLASH SCREEN ═════ -->
+<div class="splash" id="splash">
+  <div class="splash__card">
+    <!-- Bear SVG -->
+    <svg class="splash__bear" viewBox="0 0 200 250" fill="none">
+      <circle cx="58" cy="52" r="28" fill="#c49a6c"/><circle cx="58" cy="52" r="16" fill="#e4c8a4"/>
+      <circle cx="142" cy="52" r="28" fill="#c49a6c"/><circle cx="142" cy="52" r="16" fill="#e4c8a4"/>
+      <ellipse cx="100" cy="88" rx="56" ry="54" fill="#d4a876"/>
+      <ellipse cx="100" cy="186" rx="52" ry="48" fill="#d4a876"/>
+      <ellipse cx="100" cy="188" rx="34" ry="32" fill="#e4c8a4"/>
+      <ellipse cx="44" cy="172" rx="16" ry="32" fill="#c49a6c" transform="rotate(-12 44 172)"/>
+      <ellipse cx="156" cy="172" rx="16" ry="32" fill="#c49a6c" transform="rotate(12 156 172)"/>
+      <ellipse cx="72" cy="228" rx="22" ry="16" fill="#c49a6c"/>
+      <ellipse cx="72" cy="230" rx="12" ry="9" fill="#e4c8a4"/>
+      <ellipse cx="128" cy="228" rx="22" ry="16" fill="#c49a6c"/>
+      <ellipse cx="128" cy="230" rx="12" ry="9" fill="#e4c8a4"/>
+      <ellipse cx="100" cy="106" rx="24" ry="17" fill="#e4c8a4"/>
+      <circle cx="80" cy="80" r="5.5" fill="#2c1a08"/><circle cx="82" cy="78" r="1.8" fill="#fff"/>
+      <circle cx="120" cy="80" r="5.5" fill="#2c1a08"/><circle cx="122" cy="78" r="1.8" fill="#fff"/>
+      <ellipse cx="100" cy="99" rx="5.5" ry="3.8" fill="#2c1a08"/>
+      <path d="M93 105 Q100 113 107 105" stroke="#2c1a08" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M76 136 Q88 148 100 140 Q112 148 124 136 Q112 128 100 140 Q88 128 76 136Z" fill="#7fafc6" opacity=".9"/>
+      <circle cx="100" cy="138" r="4.5" fill="#5e9ab4"/>
+      <ellipse cx="68" cy="96" rx="8" ry="5" fill="#e8a88a" opacity=".3"/>
+      <ellipse cx="132" cy="96" rx="8" ry="5" fill="#e8a88a" opacity=".3"/>
+    </svg>
+    <p class="splash__pre">Has sido invitado/a al</p>
+    <h1 class="splash__title">Baby Shower</h1>
+    <p class="splash__name">Arturo Rafael</p>
+    <p class="splash__parents">
+      Con amor,<br/>
+      <strong>Yadira Hermosa</strong> &amp; <strong>Ricardo Perez</strong>
+    </p>
+    <button class="splash__btn" id="splashBtn">Abrir invitación</button>
+    <span class="splash__hint">la música se reproducirá al abrir</span>
+  </div>
+</div>
+
+<!-- GRAIN -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- BG LAYERS -->
+<div class="bg-ambient" aria-hidden="true"></div>
+<div class="bg-layer bg-stars" id="bgStars" aria-hidden="true"></div>
+<div class="bg-layer bg-clouds" id="bgClouds" aria-hidden="true"></div>
+<div class="bg-layer bg-balloons" id="bgBalloons" aria-hidden="true"></div>
+
+<!-- MUSIC BTN -->
+<button class="mu-btn on" id="muBtn" aria-label="Pausar música">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" id="muIco">
+    <rect x="6" y="5" width="4" height="14" rx="1" fill="#6d4422"/>
+    <rect x="14" y="5" width="4" height="14" rx="1" fill="#6d4422"/>
+  </svg>
+</button>
+
+<!-- ═════ PAGE ═════ -->
+<main class="page">
+
+  <!-- BANNER -->
+  <div class="bnr rv" id="gBnr">
+    <div class="bnr__lbl">Esta invitación es especialmente para</div>
+    <div class="bnr__name" id="gName">—</div>
+    <span class="bnr__passes" id="gPass">—</span>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero rv">
+    <div class="hero__bear-w">
+      <svg class="hero__bear" viewBox="0 0 200 250" fill="none">
+        <circle cx="58" cy="52" r="28" fill="#c49a6c"/><circle cx="58" cy="52" r="16" fill="#e4c8a4"/>
+        <circle cx="142" cy="52" r="28" fill="#c49a6c"/><circle cx="142" cy="52" r="16" fill="#e4c8a4"/>
+        <ellipse cx="100" cy="88" rx="56" ry="54" fill="#d4a876"/>
+        <ellipse cx="100" cy="186" rx="52" ry="48" fill="#d4a876"/>
+        <ellipse cx="100" cy="188" rx="34" ry="32" fill="#e4c8a4"/>
+        <ellipse cx="44" cy="172" rx="16" ry="32" fill="#c49a6c" transform="rotate(-12 44 172)"/>
+        <ellipse cx="156" cy="172" rx="16" ry="32" fill="#c49a6c" transform="rotate(12 156 172)"/>
+        <ellipse cx="72" cy="228" rx="22" ry="16" fill="#c49a6c"/>
+        <ellipse cx="72" cy="230" rx="12" ry="9" fill="#e4c8a4"/>
+        <ellipse cx="128" cy="228" rx="22" ry="16" fill="#c49a6c"/>
+        <ellipse cx="128" cy="230" rx="12" ry="9" fill="#e4c8a4"/>
+        <ellipse cx="100" cy="106" rx="24" ry="17" fill="#e4c8a4"/>
+        <circle cx="80" cy="80" r="5.5" fill="#2c1a08"/><circle cx="82" cy="78" r="1.8" fill="#fff"/>
+        <circle cx="120" cy="80" r="5.5" fill="#2c1a08"/><circle cx="122" cy="78" r="1.8" fill="#fff"/>
+        <ellipse cx="100" cy="99" rx="5.5" ry="3.8" fill="#2c1a08"/>
+        <path d="M93 105 Q100 113 107 105" stroke="#2c1a08" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M76 136 Q88 148 100 140 Q112 148 124 136 Q112 128 100 140 Q88 128 76 136Z" fill="#7fafc6" opacity=".9"/>
+        <circle cx="100" cy="138" r="4.5" fill="#5e9ab4"/>
+        <ellipse cx="68" cy="96" rx="8" ry="5" fill="#e8a88a" opacity=".3"/>
+        <ellipse cx="132" cy="96" rx="8" ry="5" fill="#e8a88a" opacity=".3"/>
+      </svg>
+    </div>
+    <span class="hero__parents">
+      <strong>Yadira Hermosa</strong> &amp; <strong>Ricardo Perez</strong><br/>
+      con inmensa alegría les invitan a celebrar
+    </span>
+    <span class="hero__announce">Baby Shower</span>
+    <h1 class="hero__title">Baby Shower</h1>
+    <div class="hero__name">Arturo&thinsp;&thinsp;Rafael</div>
+  </header>
+
+  <div class="orn rv" aria-hidden="true">
+    <div class="orn__l"></div><div class="orn__d"></div><div class="orn__l"></div>
+  </div>
+
+  <!-- INVITATION MESSAGE -->
+  <p class="msg rv">
+    Con mucha ilusión esperamos la llegada de nuestro bebé<br/>
+    y queremos compartir este momento tan especial contigo.<br/>
+    Nos encantaría contar con tu presencia y cariño.
+  </p>
+
+  <!-- EVENT DETAILS -->
+  <section class="panel rv" aria-label="Detalles del evento">
+    <div class="cards">
+      <div class="card rv rv-d1">
+        <svg class="card__ico" width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <rect x="3" y="7" width="30" height="26" rx="5" stroke="var(--gold)" stroke-width="1.8" fill="rgba(184,126,56,.06)"/>
+          <path d="M3 16h30" stroke="var(--gold)" stroke-width="1.4"/>
+          <rect x="11" y="4" width="2" height="6" rx="1" fill="var(--gold)"/>
+          <rect x="23" y="4" width="2" height="6" rx="1" fill="var(--gold)"/>
+          <circle cx="12" cy="24" r="2.2" fill="var(--gold2)"/><circle cx="18" cy="24" r="2.2" fill="var(--gold2)"/><circle cx="24" cy="24" r="2.2" fill="var(--gold2)"/>
+        </svg>
+        <span class="card__lbl">Fecha</span>
+        <span class="card__val">30 de mayo<br/>2026</span>
+      </div>
+      <div class="card rv rv-d2">
+        <svg class="card__ico" width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="14" stroke="var(--gold)" stroke-width="1.8" fill="rgba(184,126,56,.06)"/>
+          <path d="M18 10v8l5 4" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="18" cy="18" r="2" fill="var(--gold)"/>
+        </svg>
+        <span class="card__lbl">Hora</span>
+        <span class="card__val">3:00 p.m.</span>
+      </div>
+      <div class="card rv rv-d3">
+        <svg class="card__ico" width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 33C10 24 6 18 6 13a12 12 0 1124 0c0 5-4 11-12 20z" stroke="var(--gold)" stroke-width="1.8" fill="rgba(184,126,56,.06)"/>
+          <circle cx="18" cy="14" r="4" fill="var(--gold2)"/>
+        </svg>
+        <span class="card__lbl">Lugar</span>
+        <span class="card__val">Torres Parque<br/>Residencial El Recreo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WARM MESSAGE -->
+  <p class="msg rv" style="margin-bottom:8px">
+    Cada día que pasa nos acerca más a conocer<br/>
+    a nuestro pequeño Arturo Rafael.<br/>
+    Tu compañía hará este momento aún más inolvidable.
+  </p>
+
+  <!-- COUNTDOWN -->
+  <section class="cd-sec rv" aria-label="Cuenta regresiva">
+    <div class="cd-sec__lbl">faltan</div>
+    <div class="cd" role="timer">
+      <div class="cu"><span class="cu__n" id="cdD">--</span><span class="cu__l">días</span></div>
+      <span class="cd__sep">:</span>
+      <div class="cu"><span class="cu__n" id="cdH">--</span><span class="cu__l">horas</span></div>
+      <span class="cd__sep">:</span>
+      <div class="cu"><span class="cu__n" id="cdM">--</span><span class="cu__l">min</span></div>
+      <span class="cd__sep">:</span>
+      <div class="cu"><span class="cu__n" id="cdS">--</span><span class="cu__l">seg</span></div>
+    </div>
+  </section>
+
+  <!-- GIFT / SOBRE -->
+  <section class="gift rv" aria-label="Mesa de regalos">
+    <svg class="gift__ico" width="52" height="52" viewBox="0 0 56 56" fill="none">
+      <rect x="4" y="14" width="48" height="32" rx="6" stroke="var(--gold)" stroke-width="2" fill="rgba(184,126,56,.06)"/>
+      <path d="M4 18l24 16 24-16" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M4 46l18-14" stroke="var(--gold)" stroke-width="1.2" opacity=".35" stroke-linecap="round"/>
+      <path d="M52 46l-18-14" stroke="var(--gold)" stroke-width="1.2" opacity=".35" stroke-linecap="round"/>
+      <path d="M28 24c-2-4-7-4-7 0s7 8 7 8 7-4 7-8-5-4-7 0z" fill="var(--gold2)" opacity=".65"/>
+    </svg>
+    <h2>Mesa de Regalos</h2>
+    <p class="gift__body">
+      Tu presencia es el regalo más hermoso<br/>
+      que podemos recibir. Pero si deseas tener un<br/>
+      detalle especial con la llegada de nuestro bebé…
+    </p>
+    <p class="gift__sub">
+      Al momento de tu llegada te obsequiaremos un sobre<br/>
+      para que deposites tu aporte de la forma<br/>
+      más cómoda para ti.
+    </p>
+    <p class="gift__sub" style="font-style:normal;font-weight:500;color:var(--ink2)">
+      También puedes realizar tu aporte de manera directa.
+    </p>
+    <div class="gift__pill">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="14" rx="3" stroke="var(--ink2)" stroke-width="1.5"/><path d="M2 9l10 6 10-6" stroke="var(--ink2)" stroke-width="1.5"/></svg>
+      El sobre te espera en la entrada
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section class="rsvp rv" aria-label="Confirmación de asistencia">
+    <h2>Confirmar Asistencia</h2>
+    <p class="rsvp__sub">
+      Será un gusto contar con tu presencia<br/>
+      en este día tan especial.<br/>
+      Por favor confirma antes del <strong>25 de mayo</strong>.
+    </p>
+    <a id="waBtn" class="btn-wa" href="#" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Confirmo mi asistencia
+    </a>
+    <span class="rsvp__hint">Se abrirá WhatsApp con tu confirmación lista</span>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot rv">
+    <p class="foot__msg">
+      Gracias por ser parte de este momento tan especial<br/>
+      y por acompañarnos en la llegada de Arturo Rafael.<br/><br/>
+      Con todo nuestro amor,<br/>
+      <strong>Yadira &amp; Ricardo</strong>
+    </p>
+    <span class="foot__close">¡Te esperamos!</span>
+    <div class="foot__deco">
+      <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+        <circle cx="10" cy="8" r="5" fill="#c49a6c"/><circle cx="26" cy="8" r="5" fill="#c49a6c"/>
+        <circle cx="18" cy="14" r="10" fill="#d4a876"/>
+        <ellipse cx="18" cy="27" rx="9" ry="8" fill="#d4a876"/>
+        <ellipse cx="18" cy="17.5" rx="5" ry="3" fill="#e4c8a4"/>
+        <circle cx="14" cy="13" r="1.5" fill="#2c1a08"/><circle cx="22" cy="13" r="1.5" fill="#2c1a08"/>
+        <ellipse cx="18" cy="16" rx="1.5" ry="1" fill="#2c1a08"/>
+      </svg>
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+        <path d="M14 25C6 18 2 13 2 8.5A5.5 5.5 0 0114 7a5.5 5.5 0 0112 1.5C26 13 22 18 14 25z" fill="#7fafc6" opacity=".65"/>
+      </svg>
+      <svg width="22" height="40" viewBox="0 0 24 42" fill="none">
+        <ellipse cx="12" cy="14" rx="10" ry="13" fill="#bad4e6"/>
+        <ellipse cx="8" cy="9" rx="3" ry="4" fill="rgba(255,255,255,.3)"/>
+        <polygon points="10,27 14,27 13,30 11,30" fill="#bad4e6"/>
+        <path d="M12 30C11 34 13 37 12 40" stroke="#7fafc6" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+'use strict';
+
+/* ═════ CONFIG ═════ */
+const P = new URLSearchParams(location.search);
+const nombre = P.get('nombre') || '', familia = P.get('familia') || '';
+const pases = Math.max(1, parseInt(P.get('pases')) || 1);
+const WA = '593983479001';
+
+/* ═════ PERSONALIZATION ═════ */
+if (nombre) {
+  document.getElementById('gBnr').style.display = 'block';
+  document.getElementById('gName').textContent = familia ? `${nombre} ${familia}` : nombre;
+  document.getElementById('gPass').textContent =
+    pases === 1 ? '1 pase reservado para ti' : pases + ' pases reservados para ti';
+}
+
+/* ═════ WHATSAPP ═════ */
+(() => {
+  const g = nombre ? (familia ? `${nombre} ${familia}` : nombre) : 'un invitado especial';
+  const p = pases === 1 ? '1 persona' : `${pases} personas`;
+  const m = encodeURIComponent(
+    `¡Hola! Confirmo mi asistencia al Baby Shower de Arturo Rafael.\nSoy ${g} y asistiremos con ${p}.\n¡Gracias por la invitación!`
+  );
+  document.getElementById('waBtn').href = `https://wa.me/${WA}?text=${m}`;
+})();
+
+/* ═════ COUNTDOWN ═════ */
+const EVT = new Date('2026-05-30T15:00:00'), pd = n => String(n).padStart(2, '0');
+function tick() {
+  const d = EVT - Date.now();
+  if (d <= 0) { ['cdD','cdH','cdM','cdS'].forEach(i => document.getElementById(i).textContent = '00'); return; }
+  document.getElementById('cdD').textContent = pd(Math.floor(d / 864e5));
+  document.getElementById('cdH').textContent = pd(Math.floor(d % 864e5 / 36e5));
+  document.getElementById('cdM').textContent = pd(Math.floor(d % 36e5 / 6e4));
+  document.getElementById('cdS').textContent = pd(Math.floor(d % 6e4 / 1e3));
+}
+tick(); setInterval(tick, 1000);
+
+/* ═════ REVEAL ON SCROLL ═════ */
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+}, { threshold: .1 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ═════ STARS ═════ */
+(() => {
+  const c = document.getElementById('bgStars');
+  const cols = ['#b87e38','#daa560','#7fafc6','rgba(255,253,248,.85)'];
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('div'); s.className = 'star';
+    const sz = 2 + Math.random() * 5;
+    s.style.cssText = `left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${sz}px;height:${sz}px;background:${cols[~~(Math.random()*cols.length)]};animation-duration:${2.5+Math.random()*4.5}s;animation-delay:${Math.random()*6}s`;
+    c.appendChild(s);
+  }
+})();
+
+/* ═════ CLOUDS ═════ */
+(() => {
+  const c = document.getElementById('bgClouds');
+  function mkC(w, h) {
+    const f1 = `rgba(${220+~~(Math.random()*18)},${204+~~(Math.random()*16)},${184+~~(Math.random()*16)},.85)`;
+    const f2 = `rgba(${186+~~(Math.random()*20)},${214+~~(Math.random()*16)},${232+~~(Math.random()*10)},.45)`;
+    const f3 = `rgba(${230+~~(Math.random()*14)},${218+~~(Math.random()*14)},${200+~~(Math.random()*14)},.88)`;
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none"><ellipse cx="${w*.5}" cy="${h*.68}" rx="${w*.44}" ry="${h*.34}" fill="${f1}"/><ellipse cx="${w*.32}" cy="${h*.54}" rx="${w*.26}" ry="${h*.4}" fill="${f2}"/><ellipse cx="${w*.68}" cy="${h*.52}" rx="${w*.28}" ry="${h*.42}" fill="${f2}"/><ellipse cx="${w*.5}" cy="${h*.5}" rx="${w*.34}" ry="${h*.3}" fill="${f3}"/></svg>`;
+  }
+  [{top:'2%',w:210,h:90,dur:36,del:0,d:'l'},{top:'9%',w:250,h:100,dur:48,del:12,d:'l'},
+   {top:'16%',w:180,h:78,dur:40,del:5,d:'r'},{top:'44%',w:220,h:92,dur:50,del:18,d:'l'},
+   {top:'62%',w:190,h:82,dur:42,del:24,d:'r'},{top:'80%',w:165,h:72,dur:34,del:8,d:'l'}
+  ].forEach(q => {
+    const e = document.createElement('div');
+    e.className = `cloud cloud--${q.d}`;
+    e.style.cssText = `top:${q.top};${q.d==='r'?'right':'left'}:-${q.w+30}px;animation-duration:${q.dur}s;animation-delay:${q.del}s`;
+    e.innerHTML = mkC(q.w, q.h); c.appendChild(e);
+  });
+})();
+
+/* ═════ BALLOONS ═════ */
+(() => {
+  const c = document.getElementById('bgBalloons');
+  const pal = ['#7fafc6','#bad4e6','#d8ecf6','#ddc4a2','#daa560','#e4c8a4','#f5ece0'];
+  function mkB(col, sz) {
+    const rx = sz*.42, ry = sz*.56, cx = sz/2;
+    return `<svg width="${sz}" height="${Math.ceil(sz*1.8)}" viewBox="0 0 ${sz} ${Math.ceil(sz*1.8)}" fill="none" style="filter:drop-shadow(0 5px 12px rgba(0,0,0,.06))"><ellipse cx="${cx}" cy="${sz*.6}" rx="${rx}" ry="${ry}" fill="${col}"/><ellipse cx="${cx*.65}" cy="${sz*.42}" rx="${rx*.25}" ry="${ry*.28}" fill="rgba(255,255,255,.25)"/><polygon points="${cx-3},${sz*1.16} ${cx+3},${sz*1.16} ${cx+2},${sz*1.24} ${cx-2},${sz*1.24}" fill="${col}"/><path d="M${cx} ${sz*1.24}C${cx-2} ${sz*1.36} ${cx+3} ${sz*1.5} ${cx} ${sz*1.62}C${cx-2} ${sz*1.7} ${cx+2} ${sz*1.78} ${cx} ${sz*1.8}" stroke="${col}" stroke-width="1" stroke-linecap="round"/></svg>`;
+  }
+  [5,13,22,34,47,59,70,81,93].forEach(left => {
+    const e = document.createElement('div'); e.className = 'bln';
+    const sz = 28 + ~~(Math.random()*16);
+    e.style.cssText = `left:${left}%;animation-duration:${16+Math.random()*14}s;animation-delay:${Math.random()*22}s`;
+    e.innerHTML = mkB(pal[~~(Math.random()*pal.length)], sz); c.appendChild(e);
+  });
+})();
+
+/* ═══════════════════════════════════════════
+   ★ LULLABY — Brahms' Wiegenlied (Tone.js)
+═══════════════════════════════════════════ */
+let musicPlaying = false, musicStarted = false;
+let synth, synth2, part, rvb;
+
+async function initMusic() {
+  await Tone.start();
+  Tone.Transport.bpm.value = 46;
+
+  rvb = new Tone.Reverb({ decay: 5, wet: 0.55 }).toDestination();
+  await rvb.ready;
+  const vol = new Tone.Volume(-18).connect(rvb);
+  vol.connect(Tone.getDestination());
+
+  synth = new Tone.Synth({
+    oscillator: { type: 'sine' },
+    envelope: { attack: 0.01, decay: 1.4, sustain: 0.05, release: 1.8 }
+  }).connect(vol);
+
+  synth2 = new Tone.Synth({
+    oscillator: { type: 'triangle' },
+    envelope: { attack: 0.02, decay: 0.8, sustain: 0, release: 1.0 },
+    volume: -26
+  }).connect(vol);
+
+  const q = '4n', e8 = '8n', dq = '4n.', h = '2n', dh = '2n.';
+  const melody = [
+    ['G4',q],['G4',e8],['F#4',e8],['G4',q],
+    ['B4',dq],['A4',e8],[null,q],
+    ['A4',q],['A4',e8],['G4',e8],['A4',q],
+    ['D5',dq],['C5',e8],[null,q],
+    ['B4',q],['A4',e8],['G4',e8],['B4',q],
+    ['E4',e8],['D4',e8],['C4',h],[null,q],
+    ['G4',q],['G4',e8],['F#4',e8],['G4',q],
+    ['B4',dq],['A4',e8],[null,q],
+    ['B4',q],['A4',e8],['G4',e8],['A4',q],
+    ['G4',e8],['E4',e8],['D4',dh],
+    [null,h],[null,h]
+  ];
+
+  const events = [];
+  let t = 0;
+  melody.forEach(([note, dur]) => {
+    const secs = Tone.Time(dur).toSeconds();
+    if (note) events.push({ time: t, note, dur });
+    t += secs;
+  });
+
+  part = new Tone.Part((time, val) => {
+    synth.triggerAttackRelease(val.note, val.dur, time, 0.55);
+    synth2.triggerAttackRelease(val.note, val.dur, time, 0.35);
+  }, events.map(e => [e.time, e]));
+
+  part.loop = true;
+  part.loopEnd = t;
+  part.start(0);
+  Tone.Transport.start();
+  musicStarted = true;
+  musicPlaying = true;
+}
+
+function toggleMusic() {
+  if (!musicStarted) { initMusic(); musicPlaying = true; }
+  else if (musicPlaying) { Tone.Transport.pause(); musicPlaying = false; }
+  else { Tone.Transport.start(); musicPlaying = true; }
+  updateMuBtn();
+}
+
+function updateMuBtn() {
+  const btn = document.getElementById('muBtn');
+  const ico = document.getElementById('muIco');
+  if (musicPlaying) {
+    btn.classList.add('on');
+    ico.innerHTML = '<rect x="6" y="5" width="4" height="14" rx="1" fill="#6d4422"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#6d4422"/>';
+    btn.setAttribute('aria-label', 'Pausar música');
+  } else {
+    btn.classList.remove('on');
+    ico.innerHTML = '<path d="M9 18V5l12-2v13" stroke="#6d4422" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="#6d4422"/><circle cx="18" cy="16" r="3" fill="#6d4422"/>';
+    btn.setAttribute('aria-label', 'Reproducir música');
+  }
+}
+
+document.getElementById('muBtn').addEventListener('click', toggleMusic);
+
+/* ═════ SPLASH SCREEN ═════ */
+document.getElementById('splashBtn').addEventListener('click', async () => {
+  document.getElementById('splash').classList.add('hide');
+  document.body.classList.remove('locked');
+  /* Start music on this user gesture */
+  try { await initMusic(); updateMuBtn(); } catch(e) { console.warn('Audio init failed', e); }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestor de Invitados · Baby Shower Arturo Rafael</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Great+Vibes&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#f3e3cc;--bg2:#ebd5b9;--surface:rgba(255,251,244,.68);
+      --ink:#3f2206;--ink2:#6d4422;--ink3:#96683e;
+      --blue:#7fafc6;--blue2:#bad4e6;--blue3:#daeaf5;
+      --gold:#b87e38;--gold2:#daa560;--gold3:#f0d4a0;--white:#fffdf8;
+      --green:#2ecc71;--green2:#1fa855;--red:#d94f4f;
+      --f-script:'Great Vibes',cursive;--f-serif:'Cormorant Garamond',Georgia,serif;
+      --f-sans:'Jost',system-ui,sans-serif;
+      --ease:cubic-bezier(.22,1,.36,1);--spring:cubic-bezier(.34,1.56,.64,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--f-sans);background:var(--bg);color:var(--ink);
+      min-height:100vh;-webkit-font-smoothing:antialiased}
+    ::selection{background:var(--gold3);color:var(--ink)}
+
+    /* ═══ GRAIN ═══ */
+    .grain{position:fixed;inset:0;z-index:800;pointer-events:none;opacity:.03;mix-blend-mode:multiply;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:200px}
+
+    /* ═══ HEADER ═══ */
+    .header{
+      background:linear-gradient(145deg,var(--ink),var(--ink2));
+      color:var(--white);text-align:center;padding:44px 24px 36px;
+      position:relative;overflow:hidden;
+    }
+    .header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+      background:linear-gradient(to right,transparent,var(--gold2),transparent)}
+    .header__bear{width:56px;margin:0 auto 12px;display:block;
+      filter:drop-shadow(0 4px 12px rgba(0,0,0,.2))}
+    .header h1{font-family:var(--f-script);font-size:2.6rem;line-height:1;margin-bottom:4px}
+    .header p{font-family:var(--f-serif);font-style:italic;opacity:.75;font-size:.92rem;letter-spacing:.04em}
+
+    /* ═══ CONTAINER ═══ */
+    .container{max-width:880px;margin:0 auto;padding:32px 20px 60px}
+
+    /* ═══ SECTION CARD ═══ */
+    .sec{
+      background:var(--surface);border:1px solid rgba(184,126,56,.18);border-radius:28px;
+      padding:32px 28px;margin-bottom:28px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 8px 28px rgba(63,34,6,.05)}
+    .sec__title{font-family:var(--f-script);font-size:1.8rem;color:var(--ink);margin-bottom:18px;
+      display:flex;align-items:center;gap:10px}
+    .sec__title svg{flex-shrink:0}
+
+    /* ═══ FORM ═══ */
+    .form-row{display:grid;grid-template-columns:1fr 1fr 90px auto;gap:12px;align-items:end}
+    @media(max-width:640px){.form-row{grid-template-columns:1fr;}}
+    .field{display:flex;flex-direction:column;gap:5px}
+    .field label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+    .field input,.field select{
+      padding:13px 16px;border:1px solid rgba(184,126,56,.28);border-radius:14px;
+      background:rgba(255,253,248,.85);font-family:var(--f-sans);font-size:.92rem;color:var(--ink);
+      outline:none;transition:border-color .25s,box-shadow .25s}
+    .field input:focus,.field select:focus{border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(184,126,56,.12)}
+    .field input::placeholder{color:var(--ink3);opacity:.5}
+
+    .btn-add{
+      background:linear-gradient(135deg,var(--ink2),var(--ink));color:var(--white);border:none;
+      border-radius:14px;padding:13px 24px;font-family:var(--f-serif);font-size:.95rem;font-weight:600;
+      cursor:pointer;white-space:nowrap;letter-spacing:.03em;
+      box-shadow:0 4px 16px rgba(63,34,6,.2);transition:transform .25s var(--spring),box-shadow .25s}
+    .btn-add:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(63,34,6,.28)}
+
+    /* ═══ BULK IMPORT ═══ */
+    details{margin-bottom:28px}
+    details summary{cursor:pointer;font-weight:600;font-size:.85rem;color:var(--ink2);
+      list-style:none;display:flex;align-items:center;gap:8px;padding:14px 0;
+      border-bottom:1px solid rgba(184,126,56,.15);margin-bottom:14px}
+    details summary::before{content:'';width:6px;height:6px;border-right:2px solid var(--ink3);
+      border-bottom:2px solid var(--ink3);transform:rotate(-45deg);transition:transform .2s;flex-shrink:0}
+    details[open] summary::before{transform:rotate(45deg)}
+    .bulk-area{
+      background:rgba(127,175,198,.08);border:1.5px dashed rgba(127,175,198,.5);border-radius:18px;
+      padding:22px 24px}
+    .bulk-area textarea{
+      width:100%;padding:12px 14px;border:1px solid rgba(184,126,56,.25);border-radius:12px;
+      font-family:var(--f-sans);font-size:.86rem;color:var(--ink);background:rgba(255,253,248,.8);
+      resize:vertical;min-height:90px;outline:none;margin-bottom:6px}
+    .bulk-area textarea:focus{border-color:var(--gold)}
+    .bulk-hint{font-size:.74rem;color:var(--ink3);font-style:italic;margin-bottom:10px}
+    .btn-import{
+      background:var(--blue);color:var(--white);border:none;border-radius:12px;
+      padding:10px 22px;font-weight:600;font-size:.85rem;cursor:pointer;transition:background .2s}
+    .btn-import:hover{background:#6a9fb8}
+
+    /* ═══ STATS ═══ */
+    .stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+    .stat{
+      background:var(--surface);border:1px solid rgba(184,126,56,.18);border-radius:50px;
+      padding:7px 18px;font-size:.82rem;font-weight:500;color:var(--ink3);
+      display:flex;align-items:center;gap:6px;backdrop-filter:blur(10px)}
+    .stat__n{font-family:var(--f-serif);font-weight:700;font-size:1rem;color:var(--ink)}
+
+    /* ═══ LIST HEADER ═══ */
+    .list-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+    .list-head h2{font-family:var(--f-script);font-size:1.6rem;color:var(--ink)}
+    .btn-copy-all{
+      background:rgba(46,204,113,.1);border:1.5px solid rgba(46,204,113,.4);color:var(--green2);
+      border-radius:50px;padding:8px 20px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s}
+    .btn-copy-all:hover{background:rgba(46,204,113,.2)}
+
+    /* ═══ GUEST LIST ═══ */
+    .g-list{display:flex;flex-direction:column;gap:12px}
+    .g-item{
+      background:var(--surface);border:1px solid rgba(184,126,56,.15);border-radius:20px;
+      padding:18px 22px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+      backdrop-filter:blur(14px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 16px rgba(63,34,6,.04);
+      transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
+    .g-item:hover{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 32px rgba(63,34,6,.08)}
+    .g-item__info{min-width:0}
+    .g-item__name{font-family:var(--f-serif);font-size:1.1rem;font-weight:600;color:var(--ink)}
+    .g-item__meta{font-size:.8rem;color:var(--ink3);margin-top:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .g-item__link{
+      display:none;font-size:.72rem;color:var(--ink3);word-break:break-all;margin-top:8px;
+      background:rgba(243,227,204,.5);border-radius:10px;padding:6px 12px;font-family:monospace;
+      border:1px solid rgba(184,126,56,.15)}
+    .g-item__actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+
+    /* Status badge */
+    .badge{
+      border:none;border-radius:50px;padding:4px 12px;cursor:pointer;font-size:.74rem;font-weight:600;
+      transition:transform .15s,filter .15s;display:inline-flex;align-items:center;gap:4px}
+    .badge:hover{transform:scale(1.05)}
+    .badge--pending{background:rgba(218,165,96,.18);color:var(--ink2);border:1px solid rgba(218,165,96,.4)}
+    .badge--confirmed{background:rgba(46,204,113,.12);color:var(--green2);border:1px solid rgba(46,204,113,.35)}
+
+    /* Action buttons */
+    .btn-sm{
+      border:none;border-radius:12px;padding:9px 14px;font-size:.78rem;font-weight:600;
+      cursor:pointer;transition:transform .2s var(--spring);white-space:nowrap;
+      display:inline-flex;align-items:center;gap:5px}
+    .btn-sm:hover{transform:scale(1.04)}
+    .btn-sm svg{width:14px;height:14px;flex-shrink:0}
+    .btn-copy{background:rgba(184,126,56,.12);color:var(--ink2)}
+    .btn-wa{background:rgba(46,204,113,.12);color:var(--green2)}
+    .btn-del{background:rgba(217,79,79,.1);color:var(--red)}
+
+    /* ═══ EXPORT BAR ═══ */
+    .export{display:flex;gap:12px;justify-content:flex-end;margin-top:28px;flex-wrap:wrap}
+    .btn-export{
+      background:var(--surface);border:1px solid rgba(184,126,56,.22);border-radius:14px;
+      padding:10px 20px;font-size:.82rem;font-weight:600;color:var(--ink3);cursor:pointer;
+      transition:background .2s,transform .2s;backdrop-filter:blur(10px)}
+    .btn-export:hover{background:rgba(255,253,248,.9);transform:translateY(-2px)}
+
+    /* ═══ EMPTY STATE ═══ */
+    .empty{text-align:center;padding:52px 20px;color:var(--ink3)}
+    .empty svg{margin:0 auto 14px;display:block;opacity:.4}
+    .empty p{font-family:var(--f-serif);font-style:italic;font-size:1rem;line-height:1.6}
+
+    /* ═══ TOAST ═══ */
+    .toast{
+      position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);
+      background:var(--ink);color:var(--white);padding:12px 28px;border-radius:50px;
+      font-weight:600;font-size:.88rem;box-shadow:0 4px 20px rgba(0,0,0,.2);
+      opacity:0;transition:opacity .3s,transform .3s;z-index:999;pointer-events:none}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    /* ═══ RESPONSIVE ═══ */
+    @media(max-width:480px){
+      .container{padding:20px 14px 50px}
+      .sec{padding:24px 18px;border-radius:22px}
+      .g-item{grid-template-columns:1fr;gap:12px}
+      .g-item__actions{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <svg class="header__bear" viewBox="0 0 200 250" fill="none">
+    <circle cx="58" cy="52" r="28" fill="#c49a6c"/><circle cx="58" cy="52" r="16" fill="#e4c8a4"/>
+    <circle cx="142" cy="52" r="28" fill="#c49a6c"/><circle cx="142" cy="52" r="16" fill="#e4c8a4"/>
+    <ellipse cx="100" cy="88" rx="56" ry="54" fill="#d4a876"/>
+    <ellipse cx="100" cy="186" rx="52" ry="48" fill="#d4a876"/>
+    <ellipse cx="100" cy="188" rx="34" ry="32" fill="#e4c8a4"/>
+    <ellipse cx="44" cy="172" rx="16" ry="32" fill="#c49a6c" transform="rotate(-12 44 172)"/>
+    <ellipse cx="156" cy="172" rx="16" ry="32" fill="#c49a6c" transform="rotate(12 156 172)"/>
+    <ellipse cx="72" cy="228" rx="22" ry="16" fill="#c49a6c"/><ellipse cx="72" cy="230" rx="12" ry="9" fill="#e4c8a4"/>
+    <ellipse cx="128" cy="228" rx="22" ry="16" fill="#c49a6c"/><ellipse cx="128" cy="230" rx="12" ry="9" fill="#e4c8a4"/>
+    <ellipse cx="100" cy="106" rx="24" ry="17" fill="#e4c8a4"/>
+    <circle cx="80" cy="80" r="5.5" fill="#2c1a08"/><circle cx="82" cy="78" r="1.8" fill="#fff"/>
+    <circle cx="120" cy="80" r="5.5" fill="#2c1a08"/><circle cx="122" cy="78" r="1.8" fill="#fff"/>
+    <ellipse cx="100" cy="99" rx="5.5" ry="3.8" fill="#2c1a08"/>
+    <path d="M93 105 Q100 113 107 105" stroke="#2c1a08" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M76 136Q88 148 100 140Q112 148 124 136Q112 128 100 140Q88 128 76 136Z" fill="#7fafc6" opacity=".85"/>
+    <circle cx="100" cy="138" r="4.5" fill="#5e9ab4"/>
+    <ellipse cx="68" cy="96" rx="8" ry="5" fill="#e8a88a" opacity=".3"/>
+    <ellipse cx="132" cy="96" rx="8" ry="5" fill="#e8a88a" opacity=".3"/>
+  </svg>
+  <h1>Gestor de Invitados</h1>
+  <p>Baby Shower de Arturo Rafael &middot; 30 de mayo, 3:00 p.m.</p>
+</div>
+
+<div class="container">
+
+  <!-- ADD GUEST -->
+  <div class="sec">
+    <div class="sec__title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14m-7-7h14" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Agregar invitado
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Nombre del invitado</label>
+        <input type="text" id="inNom" placeholder="Ej: Darwin Roblez"/>
+      </div>
+      <div class="field">
+        <label>Nota familiar (opcional)</label>
+        <input type="text" id="inFam" placeholder="Ej: y familia"/>
+      </div>
+      <div class="field">
+        <label>Pases</label>
+        <select id="inPas"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option></select>
+      </div>
+      <button class="btn-add" onclick="addGuest()">Agregar</button>
+    </div>
+  </div>
+
+  <!-- BULK IMPORT -->
+  <details>
+    <summary>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="var(--ink3)" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="var(--ink3)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Importar lista masiva
+    </summary>
+    <div class="bulk-area">
+      <textarea id="bulkTxt" placeholder="Un invitado por línea. Formatos aceptados:&#10;Darwin Roblez&#10;María López, y familia, 4&#10;Juan Pérez, 2"></textarea>
+      <p class="bulk-hint">Formato: Nombre [, nota familiar] [, número de pases]</p>
+      <button class="btn-import" onclick="bulkImport()">Importar lista</button>
+    </div>
+  </details>
+
+  <!-- STATS -->
+  <div class="stats" id="statsBar"></div>
+
+  <!-- LIST -->
+  <div class="list-head">
+    <h2>Lista de invitados</h2>
+    <button class="btn-copy-all" onclick="copyAll()">Copiar todos los links</button>
+  </div>
+  <div class="g-list" id="gList"></div>
+
+  <!-- EXPORT -->
+  <div class="export">
+    <button class="btn-export" onclick="exportCSV()">Exportar CSV</button>
+    <button class="btn-export" onclick="exportTxt()">Exportar links (.txt)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ═════ CONFIG ═════ */
+const BASE = (() => {
+  const u = window.location.href;
+  /* Works with both index.html and baby-shower.html */
+  return u.replace(/invitados\.html.*$/, 'index.html').replace(/\/$/, '/index.html');
+})();
+const KEY = 'bs_arturo_rafael_guests';
+
+/* ═════ DATA ═════ */
+let guests = JSON.parse(localStorage.getItem(KEY) || '[]');
+function save() { localStorage.setItem(KEY, JSON.stringify(guests)); }
+function link(g) {
+  const p = new URLSearchParams();
+  p.set('nombre', g.nombre);
+  if (g.familia) p.set('familia', g.familia);
+  p.set('pases', g.pases);
+  return BASE + '?' + p.toString();
+}
+
+/* ═════ ADD ═════ */
+function addGuest() {
+  const nombre = document.getElementById('inNom').value.trim();
+  const familia = document.getElementById('inFam').value.trim();
+  const pases = parseInt(document.getElementById('inPas').value);
+  if (!nombre) { toast('Escribe el nombre del invitado'); return; }
+  guests.push({ id: Date.now(), nombre, familia, pases, confirmed: false });
+  save(); render();
+  document.getElementById('inNom').value = '';
+  document.getElementById('inFam').value = '';
+  document.getElementById('inPas').value = '1';
+  toast('Invitado agregado');
+}
+
+/* ═════ BULK ═════ */
+function bulkImport() {
+  const raw = document.getElementById('bulkTxt').value.trim();
+  if (!raw) return;
+  let added = 0;
+  raw.split('\n').map(l => l.trim()).filter(Boolean).forEach(line => {
+    const parts = line.split(',').map(p => p.trim());
+    const nombre = parts[0]; if (!nombre) return;
+    let familia = '', pases = 1;
+    if (parts[1]) {
+      if (!isNaN(parts[1])) pases = parseInt(parts[1]);
+      else { familia = parts[1]; if (parts[2] && !isNaN(parts[2])) pases = parseInt(parts[2]); }
+    }
+    guests.push({ id: Date.now() + Math.random(), nombre, familia, pases, confirmed: false });
+    added++;
+  });
+  save(); render();
+  document.getElementById('bulkTxt').value = '';
+  toast(`${added} invitados importados`);
+}
+
+/* ═════ ACTIONS ═════ */
+function delGuest(id) { guests = guests.filter(g => g.id !== id); save(); render(); toast('Invitado eliminado'); }
+function toggleConf(id) { const g = guests.find(g => g.id === id); if (g) { g.confirmed = !g.confirmed; save(); render(); } }
+
+function copyLink(id) {
+  const g = guests.find(g => g.id === id); if (!g) return;
+  navigator.clipboard.writeText(link(g)).then(() => toast('Link copiado')).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = link(g);
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); toast('Link copiado');
+  });
+}
+
+function copyAll() {
+  if (!guests.length) { toast('No hay invitados aún'); return; }
+  const txt = guests.map(g =>
+    `${g.nombre}${g.familia ? ' ' + g.familia : ''} (${g.pases} pase${g.pases > 1 ? 's' : ''})\n${link(g)}`
+  ).join('\n\n');
+  navigator.clipboard.writeText(txt).then(() => toast('Todos los links copiados')).catch(() => toast('Error al copiar'));
+}
+
+function openWA(id) {
+  const g = guests.find(g => g.id === id); if (!g) return;
+  const msg = encodeURIComponent(
+    `¡Hola ${g.nombre}!\n\nCon mucha alegría te invitamos al Baby Shower de Arturo Rafael.\n\n` +
+    `📅 Fecha: 30 de mayo\n🕒 Hora: 3:00 p.m.\n📍 Lugar: Torres Parque Residencial El Recreo\n\n` +
+    `Tu invitación personalizada con ${g.pases} pase${g.pases > 1 ? 's' : ''} está aquí:\n${link(g)}\n\n` +
+    `¡Te esperamos!\nYadira & Ricardo`
+  );
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+
+/* ═════ EXPORT ═════ */
+function exportCSV() {
+  const h = 'Nombre,Familia,Pases,Confirmado,Link';
+  const r = guests.map(g => `"${g.nombre}","${g.familia}","${g.pases}","${g.confirmed ? 'Sí' : 'No'}","${link(g)}"`);
+  dl('invitados_baby_shower.csv', [h, ...r].join('\n'), 'text/csv');
+}
+function exportTxt() {
+  const t = guests.map(g =>
+    `${g.nombre}${g.familia ? ' ' + g.familia : ''} | ${g.pases} pase${g.pases > 1 ? 's' : ''}\n${link(g)}`
+  ).join('\n\n');
+  dl('links_invitados.txt', t, 'text/plain');
+}
+function dl(name, content, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type }));
+  a.download = name; a.click();
+}
+
+/* ═════ TOAST ═════ */
+let tt;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ═════ RENDER ═════ */
+function render() {
+  const list = document.getElementById('gList');
+  const stats = document.getElementById('statsBar');
+  const total = guests.length;
+  const totalP = guests.reduce((s, g) => s + g.pases, 0);
+  const conf = guests.filter(g => g.confirmed).length;
+
+  stats.innerHTML = `
+    <div class="stat">Invitados <span class="stat__n">${total}</span></div>
+    <div class="stat">Pases totales <span class="stat__n">${totalP}</span></div>
+    <div class="stat">Confirmados <span class="stat__n">${conf}</span></div>
+    <div class="stat">Pendientes <span class="stat__n">${total - conf}</span></div>`;
+
+  if (!total) {
+    list.innerHTML = `<div class="empty">
+      <svg width="48" height="48" viewBox="0 0 36 36" fill="none">
+        <circle cx="10" cy="8" r="5" fill="#c49a6c"/><circle cx="26" cy="8" r="5" fill="#c49a6c"/>
+        <circle cx="18" cy="14" r="10" fill="#d4a876"/><ellipse cx="18" cy="27" rx="9" ry="8" fill="#d4a876"/>
+        <ellipse cx="18" cy="17.5" rx="5" ry="3" fill="#e4c8a4"/>
+        <circle cx="14" cy="13" r="1.5" fill="#2c1a08"/><circle cx="22" cy="13" r="1.5" fill="#2c1a08"/>
+        <ellipse cx="18" cy="16" rx="1.5" ry="1" fill="#2c1a08"/>
+      </svg>
+      <p>Aún no has agregado invitados.<br/>Comienza arriba para crear tu lista.</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = guests.map(g => {
+    const lbl = g.familia ? `${g.nombre} ${g.familia}` : g.nombre;
+    const bc = g.confirmed ? 'badge--confirmed' : 'badge--pending';
+    const bt = g.confirmed ? 'Confirmado' : 'Pendiente';
+    return `<div class="g-item">
+      <div class="g-item__info">
+        <div class="g-item__name">${lbl}</div>
+        <div class="g-item__meta">
+          ${g.pases} pase${g.pases > 1 ? 's' : ''}
+          <button class="badge ${bc}" onclick="toggleConf(${g.id})">${bt}</button>
+        </div>
+        <div class="g-item__link" id="lnk-${g.id}">${link(g)}</div>
+      </div>
+      <div class="g-item__actions">
+        <button class="btn-sm btn-copy" onclick="copyLink(${g.id})">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/></svg>
+          Copiar link
+        </button>
+        <button class="btn-sm btn-wa" onclick="openWA(${g.id})">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Enviar WA
+        </button>
+        <button class="btn-sm btn-del" onclick="delGuest(${g.id})">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('inNom').addEventListener('keydown', e => { if (e.key === 'Enter') addGuest(); });
+render();
+</script>
+</body>
+</html>
